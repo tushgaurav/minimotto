@@ -19,15 +19,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class TorrentItem(BaseModel):
     magnetLink: str
+
 
 @app.get("/")
 def read_root():
     return {}
 
+
 DOWNLOAD_DIR = "./downloads"
 METADATA_TIMEOUT_SECONDS = 15
+
 
 def get_metadata_from_magnet(magnet_link: str) -> dict:
     """
@@ -65,7 +69,7 @@ def get_metadata_from_magnet(magnet_link: str) -> dict:
 
     if handle.has_metadata():
         torrent_info = handle.torrent_file()
-        
+
         files = []
         for i in range(torrent_info.num_files()):
             file_entry = torrent_info.file_at(i)
@@ -107,26 +111,26 @@ async def check_health(torrent: TorrentItem):
     metadata = get_metadata_from_magnet(magnet_link)
     return {"metadata": metadata}
 
+
 @app.get("/search/")
-async def search(q: str):
+async def search(q: str, page: int = 1):
     """
-    Search for torrents using Jackett API and return formatted results.
-    
+    Search for torrents using Jackett API and return formatted results with pagination.
     Args:
         q (str): Search query string
-        
+        page (int): Page number (default 1)
     Returns:
         list: List of dictionaries containing formatted torrent information
     """
     jackett_url = os.getenv("JACKETT_URL")
     jackett_api_key = os.getenv("JACKETT_API_KEY")
-    
+
     full_url = f"{jackett_url}/api/v2.0/indexers/all/results/torznab/api?apikey={jackett_api_key}&t=search&q={q}"
     response = requests.get(full_url)
-    
+
     # Parse XML response
     root = ET.fromstring(response.content)
-    
+
     def format_size(size_bytes: int) -> str:
         """Convert bytes to human readable string."""
         for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
@@ -138,14 +142,14 @@ async def search(q: str):
     results = []
     for item in root.findall(".//item"):
         indexer_name = item.find("jackettindexer").text
-        
-        description = item.find("description").text      
-        
+
+        description = item.find("description").text
+
         seeders = item.find(".//torznab:attr[@name='seeders']",
-                          {"torznab": "http://torznab.com/schemas/2015/feed"})
+                            {"torznab": "http://torznab.com/schemas/2015/feed"})
         peers = item.find(".//torznab:attr[@name='peers']",
-                        {"torznab": "http://torznab.com/schemas/2015/feed"})
-        
+                          {"torznab": "http://torznab.com/schemas/2015/feed"})
+
         torrent = {
             "title": item.find("title").text,
             "pubDate": item.find("pubDate").text,
@@ -157,5 +161,15 @@ async def search(q: str):
             "magnetLink": item.find("guid").text
         }
         results.append(torrent)
-    
-    return results
+
+    # Pagination logic
+    PAGE_SIZE = 15
+    start = (page - 1) * PAGE_SIZE
+    end = start + PAGE_SIZE
+    paginated_results = results[start:end]
+    return {
+        "page": page,
+        "page_size": PAGE_SIZE,
+        "total_results": len(results),
+        "results": paginated_results
+    }
