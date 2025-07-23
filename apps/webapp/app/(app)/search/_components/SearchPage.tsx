@@ -19,21 +19,42 @@ import SearchResultCards, { SearchResultCardsProps, SearchResultCardsSkeleton } 
 
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
-  const [searchResults, setSearchResults] = useState<SearchResultCardsProps[]>([]);
+  const [searchResults, setSearchResults] = useState<{
+    page: number;
+    results: SearchResultCardsProps[];
+    total_results: number;
+  }>({
+    page: 1,
+    results: [],
+    total_results: 0,
+  });
+  const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+
+  const search = async (query: string, page: number = 1) => {
+    setLoading(true);
+    const res = await fetch(`http://localhost:8000/search/?q=${query}&page=${page}`);
+    const data = await res.json();
+    console.log({ data })
+    setSearchResults({
+      page: data.page,
+      results: data.results,
+      total_results: data.total_results,
+    });
+    setLoading(false);
+  }
 
   useEffect(() => {
-    console.log(query);
-    fetch(`http://localhost:8000/search/?q=${query}`).then(res => res.json()).then(data => {
-      console.log(data);
-      setSearchResults(data);
-    });
-  }, [query]);
+    search(query, page);
+  }, []);
 
   return (
     <div className="">
       <div className="max-w-2xl flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full text-black group mb-10 mt-4 shadow-sm hover:shadow transition-all duration-300">
-        <SearchIcon className="size-6 ml-4 text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+        <SearchIcon className="size-6 ml-4 text-gray-400 group-hover:text-gray-600 transition-colors duration-300"
+          onClick={() => search(query)}
+        />
         <Input
           placeholder="Search movies, music, books..."
           value={query}
@@ -46,45 +67,44 @@ export default function SearchResultsPage() {
       </div>
 
       <div className="flex flex-col gap-8 mt-4">
-        {searchResults.length > 0 ? (
-          searchResults.map((result) => (
-            <SearchResultCards key={result.title} {...result} />
-          ))
+        {loading ? (
+          <div className="flex flex-col gap-10">
+            <SearchResultCardsSkeleton />
+            <SearchResultCardsSkeleton />
+            <SearchResultCardsSkeleton />
+          </div>
         ) : (
           <div className="flex flex-col gap-10">
-          <SearchResultCardsSkeleton />
-          <SearchResultCardsSkeleton />
-          <SearchResultCardsSkeleton />
-          <SearchResultCardsSkeleton />
+            {searchResults.results.map((result) => (
+              <SearchResultCards key={result.title} {...result} />
+            ))}
           </div>
         )}
 
         <div className="flex justify-between max-w-xl mt-10 mb-8">
-          <p className="text-sm text-muted-foreground">Showing 1-10 of 100 results</p>
+          <p className="text-sm text-muted-foreground">Showing {searchResults.page * 15 - 15 + 1}-{searchResults.page * 15} of {searchResults.total_results} results</p>
           {/* <p className="text-sm text-muted-foreground">Sort by: Relevance</p> */}
         </div>
 
         <Pagination className="max-w-xl m-0">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious className="text-xs text-muted-foreground" href="#" />
+              <PaginationPrevious className="text-xs text-muted-foreground" />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#" isActive>1</PaginationLink>
+              <PaginationLink isActive onClick={() => setPage(searchResults.page)}>{searchResults.page}</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#" >
-                2
-              </PaginationLink>
+              <PaginationLink onClick={() => setPage(searchResults.page + 1)}>{searchResults.page + 1}</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
+              <PaginationLink onClick={() => setPage(searchResults.page + 2)}>{searchResults.page + 2}</PaginationLink>
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext className="text-xs" href="#" />
+              <PaginationNext className="text-xs" />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
