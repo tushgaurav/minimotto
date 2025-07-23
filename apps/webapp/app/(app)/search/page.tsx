@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SearchResultsPage from "./_components/SearchPage";
 import { Suspense } from "react";
+import { Page } from "@/components/shared/page";
 
 export const metadata: Metadata = {
     title: "Search | minimotto",
@@ -12,10 +13,10 @@ export const metadata: Metadata = {
 
 export default function ResultsPage() {
     return (
-        <div>
+        <Page>
             <Suspense fallback={<div>Loading...</div>}>
                 <SearchResultsPage />
             </Suspense>
-        </div>
+        </Page>
     )
 }

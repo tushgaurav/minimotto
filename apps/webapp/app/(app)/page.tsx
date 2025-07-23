@@ -1,13 +1,12 @@
 import Search from "./_components/search";
 import Doodle from "./_components/doodle";
+import { Page } from "@/components/shared/page";
 
 export default function Home() {
   return (
-    <div className="dark min-h-screen">
-      <div className="mt-[23vh]">
-        <Doodle />
-        <Search />
-      </div>
-    </div>
+    <Page className="flex flex-col items-center justify-center flex-grow w-full">
+      <Doodle />
+      <Search />
+    </Page>
   );
 }

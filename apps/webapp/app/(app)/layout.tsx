@@ -1,6 +1,5 @@
 import NavBar from "@/components/shared/nav-bar";
 import Footer from "@/components/shared/footer";
-import { Page } from "@/components/shared/page";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,11 +13,9 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <NavBar />
-      <Page>
-        {children}
-      </Page>
+      {children}
       <Footer />
     </div>
   );

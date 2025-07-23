@@ -16,13 +16,18 @@ export default function Search() {
   };
 
   return (
-    <div className="flex items-center gap-2 max-w-2xl mx-auto">
+    <div className="flex items-center gap-2 mx-auto w-full max-w-2xl">
       <div className="flex-1 flex items-center gap-2 bg-white rounded-full text-black group">
         <SearchIcon className="size-6 ml-4 group-hover:text-gray-500 transition-colors duration-300" />
         <Input
           placeholder="Search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
           className="max-w-xl p-4 h-12 border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent"
         />
         <Mic className="size-6 mr-4" />

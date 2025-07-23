@@ -88,9 +88,9 @@ export default function NavBar() {
 
         <div className="flex items-center gap-4">
           <ModeToggle />
-          <Button>
+          {/* <Button>
             <Link href="/login">Login</Link>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
