@@ -1,12 +1,8 @@
 "use client";
 
 import { Magnet } from "lucide-react";
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 type MagnetLinkButtonProps = {
   magnetLink: string;
@@ -16,21 +12,17 @@ export default function MagnetLinkButton({
   magnetLink,
 }: MagnetLinkButtonProps) {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant="link"
-          className="p-0"
-          onClick={() => {
-            navigator.clipboard.writeText(magnetLink);
-          }}
-        >
-          <Magnet className="size-4" />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Click to copy magnet link</p>
-      </TooltipContent>
-    </Tooltip>
+
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => {
+        navigator.clipboard.writeText(magnetLink);
+        toast.success("Magnet link copied to clipboard.");
+      }}
+    >
+      <Magnet className="size-4" />
+      <p>Magnet Link</p>
+    </Button>
   );
 }

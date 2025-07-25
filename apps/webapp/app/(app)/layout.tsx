@@ -1,6 +1,7 @@
 import NavBar from "@/components/shared/nav-bar";
 import Footer from "@/components/shared/footer";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "minimotto.com",
@@ -17,6 +18,7 @@ export default function AppLayout({
       <NavBar />
       {children}
       <Footer />
+      <Toaster />
     </div>
   );
 }
