@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import requests
@@ -7,6 +7,8 @@ import xml.etree.ElementTree as ET
 from pydantic import BaseModel
 import libtorrent as lt
 import time
+import xmltodict
+from lib.utils import getItemsList
 
 load_dotenv()
 app = FastAPI()
@@ -112,6 +114,20 @@ async def check_health(torrent: TorrentItem):
     return {"metadata": metadata}
 
 
+@app.get("/jackett/", response_class=Response)
+async def search(q: str):
+    """
+    Get raw data from Jackett API as a XML response 
+    """
+    jackett_url = os.getenv("JACKETT_URL")
+    jackett_api_key = os.getenv("JACKETT_API_KEY")
+
+    full_url = f"{jackett_url}/api/v2.0/indexers/all/results/torznab/api?apikey={jackett_api_key}&t=search&q={q}"
+    response = requests.get(full_url)
+
+    return Response(content=response.content, media_type="application/xml")
+
+
 @app.get("/search/")
 async def search(q: str, page: int = 1):
     """
@@ -128,48 +144,62 @@ async def search(q: str, page: int = 1):
     full_url = f"{jackett_url}/api/v2.0/indexers/all/results/torznab/api?apikey={jackett_api_key}&t=search&q={q}"
     response = requests.get(full_url)
 
-    # Parse XML response
-    root = ET.fromstring(response.content)
+    data = xmltodict.parse(response.content)
+    items = getItemsList(data)
 
-    def format_size(size_bytes: int) -> str:
-        """Convert bytes to human readable string."""
-        for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
-            if size_bytes < 1024:
-                return f"{size_bytes:.2f} {unit}"
-            size_bytes /= 1024
-        return f"{size_bytes:.2f} TB"
-
-    results = []
-    for item in root.findall(".//item"):
-        indexer_name = item.find("jackettindexer").text
-
-        description = item.find("description").text
-
-        seeders = item.find(".//torznab:attr[@name='seeders']",
-                            {"torznab": "http://torznab.com/schemas/2015/feed"})
-        peers = item.find(".//torznab:attr[@name='peers']",
-                          {"torznab": "http://torznab.com/schemas/2015/feed"})
-
-        torrent = {
-            "title": item.find("title").text,
-            "pubDate": item.find("pubDate").text,
-            "size": format_size(int(item.find("size").text)),
-            "indexer": indexer_name,
-            "seeders": int(seeders.get("value")),
-            "peers": int(peers.get("value")),
-            "description": description,
-            "magnetLink": item.find("guid").text
-        }
-        results.append(torrent)
-
-    # Pagination logic
     PAGE_SIZE = 15
     start = (page - 1) * PAGE_SIZE
     end = start + PAGE_SIZE
-    paginated_results = results[start:end]
+    paginated_results = items[start:end]
     return {
         "page": page,
         "page_size": PAGE_SIZE,
-        "total_results": len(results),
+        "total_results": len(items),
         "results": paginated_results
     }
+
+    # # Parse XML response
+    # root = ET.fromstring(response.content)
+
+    # def format_size(size_bytes: int) -> str:
+    #     """Convert bytes to human readable string."""
+    #     for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+    #         if size_bytes < 1024:
+    #             return f"{size_bytes:.2f} {unit}"
+    #         size_bytes /= 1024
+    #     return f"{size_bytes:.2f} TB"
+
+    # results = []
+    # for item in root.findall(".//item"):
+    #     indexer_name = item.find("jackettindexer").text
+
+    #     description = item.find("description").text
+
+    #     seeders = item.find(".//torznab:attr[@name='seeders']",
+    #                         {"torznab": "http://torznab.com/schemas/2015/feed"})
+    #     peers = item.find(".//torznab:attr[@name='peers']",
+    #                       {"torznab": "http://torznab.com/schemas/2015/feed"})
+
+    #     torrent = {
+    #         "title": item.find("title").text,
+    #         "pubDate": item.find("pubDate").text,
+    #         "size": format_size(int(item.find("size").text)),
+    #         "indexer": indexer_name,
+    #         "seeders": int(seeders.get("value")),
+    #         "peers": int(peers.get("value")),
+    #         "description": description,
+    #         "magnetLink": item.find("guid").text
+    #     }
+    #     results.append(torrent)
+
+    # # Pagination logic
+    # PAGE_SIZE = 15
+    # start = (page - 1) * PAGE_SIZE
+    # end = start + PAGE_SIZE
+    # paginated_results = results[start:end]
+    # return {
+    #     "page": page,
+    #     "page_size": PAGE_SIZE,
+    #     "total_results": len(results),
+    #     "results": paginated_results
+    # }
