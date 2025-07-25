@@ -1,4 +1,6 @@
-# minimotto: Quality Torrent Index
+# minimotto: Modern Torrent Search Client
+
+![screenshot](./assets/images/frontend_screenshot.png)
 
 A torrent indexing service featuring individually verified torrents with active links. Minimotto also hosts a private, members-only section for exclusive content.
 
