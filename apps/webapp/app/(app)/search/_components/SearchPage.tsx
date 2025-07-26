@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
 import { Mic } from "lucide-react";
@@ -13,9 +13,11 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import SearchResultCards, { SearchResultCardsProps, SearchResultCardsSkeleton } from "./SearchResultCards";
-
+} from "@/components/ui/pagination";
+import SearchResultCards, {
+  SearchResultCardsProps,
+  SearchResultCardsSkeleton,
+} from "./SearchResultCards";
 
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
@@ -29,36 +31,45 @@ export default function SearchResultsPage() {
     total_results: 0,
   });
   const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState(searchParams.get("q") || "");
-  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+  const router = useRouter();
 
   const search = async (query: string, page: number = 1) => {
     setLoading(true);
-    const res = await fetch(`http://localhost:8000/search/?q=${query}&page=${page}`);
+    const res = await fetch(
+      `http://localhost:8000/search/?q=${query}&page=${page}`
+    );
     const data = await res.json();
-    console.log({ data })
+    console.log({ data });
     setSearchResults({
       page: data.page,
       results: data.results,
       total_results: data.total_results,
     });
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
-    search(query, page);
-  }, []);
+    search(searchParams.get("q")!, Number(searchParams.get("page")) || 1);
+    document.title = `${searchParams.get("q")} | minimotto`;
+  }, [searchParams]);
 
   return (
     <div className="">
       <div className="max-w-2xl flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full text-black group mb-10 mt-4 shadow-sm hover:shadow transition-all duration-300">
-        <SearchIcon className="size-6 ml-4 text-gray-400 group-hover:text-gray-600 transition-colors duration-300"
-          onClick={() => search(query)}
+        <SearchIcon
+          className="size-6 ml-4 text-gray-400 group-hover:text-gray-600 transition-colors duration-300"
+          onClick={() => router.push(`/search?q=${searchTerm}`)}
         />
         <Input
           placeholder="Search movies, music, books..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              router.push(`/search?q=${searchTerm}`);
+            }
+          }}
           className="w-full p-4 h-12 border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent placeholder:text-gray-400"
         />
         <button className="shrink-0 p-2 mr-2 hover:bg-gray-100 rounded-full transition-colors duration-300">
@@ -82,33 +93,67 @@ export default function SearchResultsPage() {
         )}
 
         <div className="flex justify-between max-w-xl mt-10 mb-8">
-          <p className="text-sm text-muted-foreground">Showing {searchResults.page * 15 - 15 + 1}-{searchResults.page * 15} of {searchResults.total_results} results</p>
+          <p className="text-sm text-muted-foreground">
+            Page {searchResults.page} of{" "}
+            {Math.ceil(searchResults.total_results / 15)} Showing{" "}
+            {searchResults.page * 15 - 15 + 1}-{searchResults.page * 15} of{" "}
+            {searchResults.total_results} results
+          </p>
           {/* <p className="text-sm text-muted-foreground">Sort by: Relevance</p> */}
         </div>
 
         <Pagination className="max-w-xl m-0">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious className="text-xs text-muted-foreground" />
+              <PaginationPrevious
+                className="text-xs text-muted-foreground"
+                onClick={() =>
+                  router.push(
+                    `/search?q=${searchTerm}&page=${searchResults.page - 1}`
+                  )
+                }
+              />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink isActive onClick={() => setPage(searchResults.page)}>{searchResults.page}</PaginationLink>
+              <PaginationLink isActive>{searchResults.page}</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink onClick={() => setPage(searchResults.page + 1)}>{searchResults.page + 1}</PaginationLink>
+              <PaginationLink
+                onClick={() =>
+                  router.push(
+                    `/search?q=${searchTerm}&page=${searchResults.page + 1}`
+                  )
+                }
+              >
+                {searchResults.page + 1}
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink onClick={() => setPage(searchResults.page + 2)}>{searchResults.page + 2}</PaginationLink>
+              <PaginationLink
+                onClick={() =>
+                  router.push(
+                    `/search?q=${searchTerm}&page=${searchResults.page + 2}`
+                  )
+                }
+              >
+                {searchResults.page + 2}
+              </PaginationLink>
             </PaginationItem>
             <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext className="text-xs" />
+              <PaginationNext
+                className="text-xs"
+                onClick={() =>
+                  router.push(
+                    `/search?q=${searchTerm}&page=${searchResults.page + 1}`
+                  )
+                }
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-
       </div>
     </div>
   );
