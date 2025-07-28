@@ -102,7 +102,9 @@ export default function SearchResultsPage() {
           {/* <p className="text-sm text-muted-foreground">Sort by: Relevance</p> */}
         </div>
 
-        <Pagination className="max-w-xl m-0">
+        {
+          searchResults.total_results > 15 && (
+            <Pagination className="max-w-xl m-0">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
@@ -151,9 +153,10 @@ export default function SearchResultsPage() {
                   )
                 }
               />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );
