@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Search as SearchIcon } from "lucide-react";
+import { Search, Search as SearchIcon } from "lucide-react";
 import { Mic } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
@@ -19,6 +19,46 @@ import SearchResultCards, {
   SearchResultCardsSkeleton,
 } from "./SearchResultCards";
 
+function NoSearchResults({ searchQuery }: { searchQuery: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[400px] px-4 py-8">
+      <div className="mb-8">
+        <div className="w-24 h-24 bg-zinc-800 rounded-full flex items-center justify-center shadow-lg">
+          <Search className="w-12 h-12 text-zinc-300" />
+        </div>
+      </div>
+
+      <div className="text-center max-w-lg space-y-6">
+        <div>
+          <h2 className="text-xl font-bold text-muted-foreground mb-3">No results found</h2>
+          {searchQuery && (
+            <p className="text-md text-muted-foreground">
+              We couldn't find anything for <span className="font-medium text-muted-foreground">"{searchQuery}"</span>
+            </p>
+          )}
+        </div>
+
+        <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
+          <h3 className="text-sm font-semibold text-foreground mb-4">Try these suggestions:</h3>
+          <ul className="space-y-3 text-sm text-muted-foreground">
+            <li className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+              <span>Try different or more general keywords</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+              <span>Check your spelling and try again</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+              <span>Use fewer search terms for broader results</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
@@ -90,6 +130,9 @@ export default function SearchResultsPage() {
             {searchResults.results.map((result) => (
               <SearchResultCards key={result.title} {...result} />
             ))}
+            {searchResults.results.length === 0 && (
+              <NoSearchResults searchQuery={searchTerm} />
+            )}
           </div>
         )}
 
@@ -103,57 +146,56 @@ export default function SearchResultsPage() {
           {/* <p className="text-sm text-muted-foreground">Sort by: Relevance</p> */}
         </div>
 
-        {
-          searchResults.total_results > 15 && (
-            <Pagination className="max-w-xl m-0">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className="text-xs text-muted-foreground"
-                onClick={() =>
-                  router.push(
-                    `/search?q=${searchTerm}&page=${searchResults.page - 1}`
-                  )
-                }
-              />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink isActive>{searchResults.page}</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                onClick={() =>
-                  router.push(
-                    `/search?q=${searchTerm}&page=${searchResults.page + 1}`
-                  )
-                }
-              >
-                {searchResults.page + 1}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink
-                onClick={() =>
-                  router.push(
-                    `/search?q=${searchTerm}&page=${searchResults.page + 2}`
-                  )
-                }
-              >
-                {searchResults.page + 2}
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext
-                className="text-xs"
-                onClick={() =>
-                  router.push(
-                    `/search?q=${searchTerm}&page=${searchResults.page + 1}`
-                  )
-                }
-              />
+        {searchResults.total_results > 15 && (
+          <Pagination className="max-w-xl m-0">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  className="text-xs text-muted-foreground"
+                  onClick={() =>
+                    router.push(
+                      `/search?q=${searchTerm}&page=${searchResults.page - 1}`
+                    )
+                  }
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink isActive>{searchResults.page}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  onClick={() =>
+                    router.push(
+                      `/search?q=${searchTerm}&page=${searchResults.page + 1}`
+                    )
+                  }
+                >
+                  {searchResults.page + 1}
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  onClick={() =>
+                    router.push(
+                      `/search?q=${searchTerm}&page=${searchResults.page + 2}`
+                    )
+                  }
+                >
+                  {searchResults.page + 2}
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  className="text-xs"
+                  onClick={() =>
+                    router.push(
+                      `/search?q=${searchTerm}&page=${searchResults.page + 1}`
+                    )
+                  }
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
