@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Search, Search as SearchIcon } from "lucide-react";
+import { ChevronDown, Search, Search as SearchIcon } from "lucide-react";
 import { Mic } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
@@ -14,10 +14,20 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import SearchResultCards, {
   SearchResultCardsProps,
   SearchResultCardsSkeleton,
 } from "./SearchResultCards";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   return (
@@ -60,6 +70,8 @@ function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   );
 }
 
+type SortBy = "none" | "seeders_asc" | "seeders_desc" | "peers_asc" | "peers_desc" | "date_uploaded_asc" | "date_uploaded_desc" | "size_asc" | "size_desc";
+
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
   const [searchResults, setSearchResults] = useState<{
@@ -73,7 +85,37 @@ export default function SearchResultsPage() {
   });
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+  const [sortBy, setSortBy] = useState<SortBy>("none");
   const router = useRouter();
+
+  const sort = (searchResults: SearchResultCardsProps[], sortBy: SortBy) => {
+    if (sortBy === "seeders_asc") {
+      return searchResults.sort((a, b) => a.seeders - b.seeders);
+    } else if (sortBy === "seeders_desc") {
+      return searchResults.sort((a, b) => b.seeders - a.seeders);
+    } else if (sortBy === "peers_asc") {
+      return searchResults.sort((a, b) => a.peers - b.peers);
+    } else if (sortBy === "peers_desc") {
+      return searchResults.sort((a, b) => b.peers - a.peers);
+    } else if (sortBy === "date_uploaded_asc") {
+      return searchResults.sort((a, b) => a.date_uploaded - b.date_uploaded);
+    } else if (sortBy === "date_uploaded_desc") {
+      return searchResults.sort((a, b) => b.date_uploaded - a.date_uploaded);
+    } else if (sortBy === "size_asc") {
+      return searchResults.sort((a, b) => a.size - b.size);
+    }
+  };
+
+  const sortResults = (sortBy: SortBy) => {
+    setSortBy(sortBy);
+    const sortedResults = sort(searchResults.results, sortBy);
+    if (sortedResults) {
+      setSearchResults({
+        ...searchResults,
+        results: sortedResults,
+      });
+    }
+  };
 
   const search = async (query: string, page: number = 1) => {
     setLoading(true);
@@ -116,6 +158,54 @@ export default function SearchResultsPage() {
         <button className="shrink-0 p-2 mr-2 hover:bg-gray-100 rounded-full transition-colors duration-300">
           <Mic className="size-6 text-gray-400 hover:text-gray-600" />
         </button>
+      </div>
+
+      {/* Sorting */}
+      <div className="flex justify-end items-center gap-4">
+        {sortBy !== "none" && ( 
+          <Badge className="p-2" variant="secondary" >
+            {(() => {
+              switch (sortBy) {
+                case "size_asc":
+                  return "Size Ascending";
+                case "size_desc":
+                  return "Size Descending";
+                case "seeders_asc":
+                  return "Seeders Ascending";
+                case "seeders_desc":
+                  return "Seeders Descending";
+                case "peers_asc":
+                  return "Peers Ascending";
+                case "peers_desc":
+                  return "Peers Descending";
+                case "date_uploaded_asc":
+                  return "Date Uploaded Ascending";
+                case "date_uploaded_desc":
+                  return "Date Uploaded Descending";
+                default:
+                  return "None";
+              }
+            })()}
+          </Badge>
+        )}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="sm">
+              Sort by <ChevronDown className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => sortResults("size_asc")}>Size (Asc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("size_desc")}>Size (Desc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("seeders_asc")}>Seeders (Asc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("seeders_desc")}>Seeders (Desc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("peers_asc")}>Peers (Asc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("peers_desc")}>Peers (Desc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("date_uploaded_asc")}>Date Uploaded (Asc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("date_uploaded_desc")}>Date Uploaded (Desc)</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <div className="flex flex-col gap-8 mt-4">
