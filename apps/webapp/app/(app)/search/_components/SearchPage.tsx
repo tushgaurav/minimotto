@@ -19,6 +19,7 @@ import SearchResultCards, {
   SearchResultCardsSkeleton,
 } from "./SearchResultCards";
 
+
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
   const [searchResults, setSearchResults] = useState<{
@@ -37,7 +38,7 @@ export default function SearchResultsPage() {
   const search = async (query: string, page: number = 1) => {
     setLoading(true);
     const res = await fetch(
-      `http://localhost:8000/search/?q=${query}&page=${page}`
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}search/?q=${query}&page=${page}`
     );
     const data = await res.json();
     console.log({ data });
