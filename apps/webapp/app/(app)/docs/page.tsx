@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageTitle, Paragraph } from "@/components/shared/page";
+import { Page, PageTitle, Paragraph } from "@/components/shared/page";
 
 export const metadata : Metadata = {
     title: "Docs"
@@ -7,7 +7,7 @@ export const metadata : Metadata = {
 
 export default function DocsPage() {
   return (
-    <div>
+    <Page>
       <PageTitle>Docs</PageTitle>
 
       <Paragraph>
@@ -29,6 +29,6 @@ export default function DocsPage() {
         guide which will walk you through the basics of setting up and using our
         platform effectively.
       </Paragraph>
-    </div>
+    </Page>
   );
 }
