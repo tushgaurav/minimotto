@@ -13,6 +13,7 @@ A torrent indexing service featuring individually verified torrents with active 
 - Categories
 - User Profiles
 - Blogs and How-To Guides
+- Bookmarks
 
 ## Tech Stack
 - Next.js
