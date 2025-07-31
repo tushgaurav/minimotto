@@ -18,8 +18,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import SearchResultCards, {
@@ -98,11 +96,13 @@ export default function SearchResultsPage() {
     } else if (sortBy === "peers_desc") {
       return searchResults.sort((a, b) => b.peers - a.peers);
     } else if (sortBy === "date_uploaded_asc") {
-      return searchResults.sort((a, b) => a.date_uploaded - b.date_uploaded);
+      return searchResults.sort((a, b) => new Date(a.pubDate).getTime() - new Date(b.pubDate).getTime());
     } else if (sortBy === "date_uploaded_desc") {
-      return searchResults.sort((a, b) => b.date_uploaded - a.date_uploaded);
+      return searchResults.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
     } else if (sortBy === "size_asc") {
-      return searchResults.sort((a, b) => a.size - b.size);
+      return searchResults.sort((a, b) => Number(a.size) - Number(b.size));
+    } else if (sortBy === "size_desc") {
+      return searchResults.sort((a, b) => Number(b.size) - Number(a.size));
     }
   };
 
