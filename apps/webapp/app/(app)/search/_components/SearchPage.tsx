@@ -233,7 +233,6 @@ export default function SearchResultsPage() {
             {searchResults.page * 15 - 15 + 1}-{searchResults.page * 15} of{" "}
             {searchResults.total_results} results
           </p>
-          {/* <p className="text-sm text-muted-foreground">Sort by: Relevance</p> */}
         </div>
 
         {searchResults.total_results > 15 && (

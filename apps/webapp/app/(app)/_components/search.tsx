@@ -17,7 +17,7 @@ export default function Search() {
 
   return (
     <div className="flex items-center gap-2 mx-auto w-full max-w-2xl">
-      <div className="flex-1 flex items-center gap-2 bg-white rounded-full text-black group">
+      <div className="flex-1 flex items-center gap-2 bg-zinc-800 dark:bg-white rounded-full text-white dark:text-black group">
         <SearchIcon className="size-6 ml-4 group-hover:text-gray-500 transition-colors duration-300" />
         <Input
           placeholder="Search"
