@@ -16,7 +16,7 @@ import { Button } from "../ui/button";
 import UserMenu from "./user-menu";
 
 export default function NavBar() {
-  const { data: session, isPending, error, refetch } = useSession();
+  const { data: session, isPending } = useSession();
 
   console.log(session);
 

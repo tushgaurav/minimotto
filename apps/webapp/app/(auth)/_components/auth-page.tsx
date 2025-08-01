@@ -22,10 +22,11 @@ export default function AuthPage() {
                 password: password,
                 callbackURL: "/",
             }, {
-                onRequest: (ctx) => {
+                onRequest: () => {
                     // TODO: add posthog event
+                    console.log("Signing in...")
                 },
-                onSuccess: (ctx) => {
+                onSuccess: () => {
                     toast.success("Signed in successfully")
                 },
                 onError: (ctx) => {
@@ -41,10 +42,10 @@ export default function AuthPage() {
                 name: name,
                 callbackURL: "/",
             }, {
-                onRequest: (ctx) => {
+                onRequest: () => {
                     // TODO: add posthog event
                 },
-                onSuccess: (ctx) => {
+                onSuccess: () => {
                     toast.success("Account created successfully")
                 },
                 onError: (ctx) => {
