@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, ChevronDown, Search, Search as SearchIcon } from "lucide-react";
+import { ChevronDown, Search, Search as SearchIcon } from "lucide-react";
 import { Mic } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
