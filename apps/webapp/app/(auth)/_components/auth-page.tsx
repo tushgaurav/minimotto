@@ -1,12 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Eye, EyeOff, Moon, Sun } from "lucide-react"
-
+import { Eye, EyeOff } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
 import { signIn, signUp } from "@/lib/auth-client"
 
 export default function AuthPage() {
@@ -24,13 +23,13 @@ export default function AuthPage() {
                 callbackURL: "/",
             }, {
                 onRequest: (ctx) => {
-                    alert("Signing in...")
+                    // TODO: add posthog event
                 },
                 onSuccess: (ctx) => {
-                    alert("Signed in successfully")
+                    toast.success("Signed in successfully")
                 },
                 onError: (ctx) => {
-                    console.log(ctx)
+                    toast.error(ctx.error.message)
                 }
             })
             console.log(data, error)
@@ -43,13 +42,13 @@ export default function AuthPage() {
                 callbackURL: "/",
             }, {
                 onRequest: (ctx) => {
-                    alert("Creating account...")
+                    // TODO: add posthog event
                 },
                 onSuccess: (ctx) => {
-                    alert("Account created successfully")
+                    toast.success("Account created successfully")
                 },
                 onError: (ctx) => {
-                    alert(ctx.error.message)
+                    toast.error(ctx.error.message)
                 }
             })
             console.log(data, error)
@@ -64,12 +63,12 @@ export default function AuthPage() {
                     <div className="hidden lg:flex lg:w-1/2 relative bg-zinc-100 dark:bg-zinc-900">
                         <div className="absolute inset-0 bg-gradient-to-br from-zinc-200 to-zinc-300 dark:from-zinc-800 dark:to-zinc-900" />
                         {/* Logo - Top Right */}
-                        <div className="absolute top-6 right-6 z-20">
-                            <div className="flex items-center space-x-2">
-                                <div className="w-8 h-8 bg-zinc-800 dark:bg-zinc-200 rounded-lg flex items-center justify-center">
-                                    <div className="w-4 h-4 bg-zinc-100 dark:bg-zinc-800 rounded-sm" />
+                        <div className="absolute top-6 left-6 z-20">
+                            <div className="flex items-center space-x-4">
+                                <div className="w-6 h-6 bg-zinc-800 dark:bg-zinc-200 flex items-center justify-center rotate-[15deg]">
+                                    <div className="w-3 h-3 bg-zinc-100 dark:bg-zinc-800" />
                                 </div>
-                                <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">Brand</span>
+                                <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">minimotto</span>
                             </div>
                         </div>
                         <div className="relative z-10 flex items-center justify-center w-full">
@@ -80,7 +79,7 @@ export default function AuthPage() {
                                 <div className="space-y-2">
                                     <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-200">Welcome Back</h2>
                                     <p className="text-zinc-600 dark:text-zinc-400 max-w-md">
-                                        Join thousands of users who trust our platform for their daily workflow
+                                        Open search and download your favorite movies, music, books, and more.
                                     </p>
                                 </div>
                             </div>
@@ -89,9 +88,9 @@ export default function AuthPage() {
                         <div className="absolute bottom-6 right-6 z-20 max-w-xs">
                             <blockquote className="text-right">
                                 <p className="text-sm italic text-zinc-600 dark:text-zinc-400 mb-2">
-                                    "Success is not final, failure is not fatal: it is the courage to continue that counts."
+                                    "Piracy is almost always a service problem and not a pricing problem."
                                 </p>
-                                <cite className="text-xs font-medium text-zinc-500 dark:text-zinc-500">— Winston Churchill</cite>
+                                <cite className="text-xs font-medium text-zinc-500 dark:text-zinc-500">— Gabe Newell</cite>
                             </blockquote>
                         </div>
                     </div>
@@ -112,7 +111,7 @@ export default function AuthPage() {
                             </div>
 
                             {/* Social Login */}
-                            <div className="space-y-3">
+                            {/* <div className="space-y-3">
                                 <Button
                                     variant="outline"
                                     className="w-full border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 bg-transparent"
@@ -157,7 +156,7 @@ export default function AuthPage() {
                                         Or continue with email
                                     </span>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Form */}
                             <div className="space-y-4">

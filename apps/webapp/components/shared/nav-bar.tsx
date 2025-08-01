@@ -11,8 +11,15 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "./mode-toggle";
+import { useSession, signOut } from "@/lib/auth-client";
+import { Button } from "../ui/button";
+import UserMenu from "./user-menu";
 
 export default function NavBar() {
+  const { data: session, isPending, error, refetch } = useSession();
+
+  console.log(session);
+
   return (
     <div className="border-b-2 dark:border-zinc-800 border-zinc-200">
       <div className="flex px-6 py-4 items-center gap-4 max-w-screen-2xl mx-auto justify-between">
@@ -99,9 +106,17 @@ export default function NavBar() {
 
         <div className="flex items-center gap-4">
           <ModeToggle />
-          {/* <Button>
-            <Link href="/login">Login</Link>
-          </Button> */}
+          {isPending ? (
+            <div className="w-8 h-8 bg-zinc-200 dark:bg-zinc-600 rounded-full animate-pulse" />
+          ) : (
+            session ? (
+              <UserMenu user={session.user} onSignOut={() => signOut()} />
+            ) : (
+              <Button asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+            )
+          )}
         </div>
       </div>
     </div>
