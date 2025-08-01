@@ -109,11 +109,14 @@ export default function SearchResultCards({
 
 export function SearchResultCardsSkeleton() {
   return (
-    <div className="flex flex-col gap-2 max-w-xl bg-[#111111]/50 rounded-lg p-4">
+    <div className="flex flex-col gap-2 max-w-3xl bg-secondary p-4">
       <div className="flex flex-col gap-4">
-        <div className="w-full h-8 bg-zinc-800 rounded-full animate-pulse" />
-        <div className="w-full h-20 bg-zinc-800 rounded-md animate-pulse flex items-center justify-center"></div>
-      </div>
+        <div className="flex flex-col gap-2">
+          <div className="w-full h-8 bg-secondary-foreground/20 dark:bg-primary-foreground animate-pulse" />
+          <div className="h-8 bg-secondary-foreground/20 dark:bg-primary-foreground animate-pulse w-1/3" />
+        </div>
+        <div className="w-full h-20 bg-secondary-foreground/20 dark:bg-primary-foreground animate-pulse flex items-center justify-center"></div>
+      </div >
     </div>
   );
 }

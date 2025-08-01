@@ -17,10 +17,11 @@ export default function Search() {
 
   return (
     <div className="flex items-center gap-2 mx-auto w-full max-w-2xl">
-      <div className="flex-1 flex items-center gap-2 bg-zinc-800 dark:bg-white rounded-full text-white dark:text-black group">
-        <SearchIcon className="size-6 ml-4 group-hover:text-gray-500 transition-colors duration-300" />
+      <div className="flex-1 flex items-center gap-2 bg-secondary dark:bg-secondary rounded-full">
+        <SearchIcon className="size-6 ml-4 hover:text-secondary-foreground transition-colors duration-300 text-muted-foreground" />
         <Input
           placeholder="Search"
+          id="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => {
@@ -30,10 +31,10 @@ export default function Search() {
           }}
           className="max-w-xl p-4 h-12 border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent"
         />
-        <Mic className="size-6 mr-4" />
+        <Mic className="size-6 mr-4 text-muted-foreground hover:text-secondary-foreground transition-colors duration-300" />
       </div>
       <Button className="rounded-full h-12 w-12" onClick={handleSearch}>
-        <ArrowRight className="size-6" />
+        <ArrowRight className="size-6 text-secondary" />
       </Button>
     </div>
   );

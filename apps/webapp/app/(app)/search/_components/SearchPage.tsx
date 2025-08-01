@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { ChevronDown, Search, Search as SearchIcon } from "lucide-react";
+import { ArrowRight, ChevronDown, Search, Search as SearchIcon } from "lucide-react";
 import { Mic } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
@@ -68,7 +68,17 @@ function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   );
 }
 
-type SortBy = "none" | "seeders_asc" | "seeders_desc" | "peers_asc" | "peers_desc" | "date_uploaded_asc" | "date_uploaded_desc" | "size_asc" | "size_desc";
+type SortBy = "none" |
+  "seeders_asc" |
+  "seeders_desc" |
+  "peers_asc" |
+  "peers_desc" |
+  "date_uploaded_asc" |
+  "date_uploaded_desc" |
+  "size_asc" |
+  "size_desc" |
+  "name_asc" |
+  "name_desc";
 
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
@@ -139,30 +149,30 @@ export default function SearchResultsPage() {
 
   return (
     <div className="">
-      <div className="max-w-2xl flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full text-black group mb-10 mt-4 shadow-sm hover:shadow transition-all duration-300">
-        <SearchIcon
-          className="size-6 ml-4 text-gray-400 group-hover:text-gray-600 transition-colors duration-300"
-          onClick={() => router.push(`/search?q=${searchTerm}`)}
-        />
-        <Input
-          placeholder="Search movies, music, books..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              router.push(`/search?q=${searchTerm}`);
-            }
-          }}
-          className="w-full p-4 h-12 border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent placeholder:text-gray-400"
-        />
-        <button className="shrink-0 p-2 mr-2 hover:bg-gray-100 rounded-full transition-colors duration-300">
-          <Mic className="size-6 text-gray-400 hover:text-gray-600" />
-        </button>
+      <div className="flex items-center gap-2 w-full max-w-2xl">
+        <div className="flex-1 flex items-center gap-2 bg-secondary dark:bg-secondary rounded-full">
+          <SearchIcon
+            className="size-6 ml-4 hover:text-secondary-foreground transition-colors duration-300 text-muted-foreground"
+            onClick={() => router.push(`/search?q=${searchTerm}`)}
+          />
+          <Input
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                router.push(`/search?q=${searchTerm}`);
+              }
+            }}
+            className="max-w-xl p-4 h-12 border-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent"
+          />
+          <Mic className="size-6 mr-4 text-muted-foreground hover:text-secondary-foreground transition-colors duration-300" />
+        </div>
       </div>
 
       {/* Sorting */}
       <div className="flex justify-end items-center gap-4">
-        {sortBy !== "none" && ( 
+        {sortBy !== "none" && (
           <Badge className="p-2" variant="secondary" >
             {(() => {
               switch (sortBy) {

@@ -21,7 +21,7 @@ export default function NavBar() {
   console.log(session);
 
   return (
-    <div className="border-b-2 dark:border-zinc-800 border-zinc-200">
+    <div className="border-b-2 dark:border-accent border-secondary">
       <div className="flex px-6 py-4 items-center gap-4 max-w-screen-2xl mx-auto justify-between">
         <div className="flex gap-4">
           <Link href="/" className="p-1">

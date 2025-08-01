@@ -19,10 +19,10 @@ export default function UserMenu({ user, onSignOut }: { user: User, onSignOut: (
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                <Button variant="ghost" size="icon" className="rounded-full border-1 hover:bg-secondary-foreground/50 dark:hover:bg-secondary-foreground/50">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.image || "/placeholder.svg"} alt={user.name} />
-                        <AvatarFallback className="bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-sm font-semibold">
+                        <AvatarFallback className="bg-muted text-muted-foreground text-sm font-semibold">
                             {user.name.charAt(0) + user.name.charAt(user.name.indexOf(" ") + 1)}
                         </AvatarFallback>
                     </Avatar>
@@ -30,33 +30,33 @@ export default function UserMenu({ user, onSignOut }: { user: User, onSignOut: (
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 align="end"
-                className="w-60 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-lg"
+                className="w-60"
                 sideOffset={8}
             >
                 <div className="p-2">
                     <div className="flex flex-col">
-                        <p className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm">{user.name}</p>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400">{user.email}</p>
+                        <p className="font-semibold text-sm">{user.name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
                 </div>
 
-                <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-800" />
+                <DropdownMenuSeparator />
 
                 <div className="py-1 space-y-1">
-                    <DropdownMenuItem className="px-2 py-1 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
-                        <UserIcon className="mr-1 h-4 w-4" />
+                    <DropdownMenuItem>
+                        <UserIcon className="mr-2 h-4 w-4" />
                         Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="px-2 py-1 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
-                        <Settings className="mr-1 h-4 w-4" />
+                    <DropdownMenuItem>
+                        <Settings className="mr-2 h-4 w-4" />
                         Settings
                     </DropdownMenuItem>
                 </div>
 
-                <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-800" />
+                <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={onSignOut} className="px-2 py-1 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
-                    <LogOut className="mr-1 h-4 w-4" />
+                <DropdownMenuItem onClick={onSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
                     Sign Out
                 </DropdownMenuItem>
             </DropdownMenuContent>
