@@ -31,8 +31,8 @@ function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] px-4 py-8">
       <div className="mb-8">
-        <div className="w-24 h-24 bg-zinc-800 rounded-full flex items-center justify-center shadow-lg">
-          <Search className="w-12 h-12 text-zinc-300" />
+        <div className="w-24 h-24 bg-secondary rounded-full flex items-center justify-center shadow-lg">
+          <Search className="w-12 h-12 text-secondary-foreground" />
         </div>
       </div>
 
@@ -171,7 +171,7 @@ export default function SearchResultsPage() {
       </div>
 
       {/* Sorting */}
-      <div className="flex justify-end items-center gap-4">
+      <div className="mt-4 flex justify-end items-center gap-4">
         {sortBy !== "none" && (
           <Badge className="p-2" variant="secondary" >
             {(() => {

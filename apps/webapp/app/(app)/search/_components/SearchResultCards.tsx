@@ -74,7 +74,15 @@ export default function SearchResultCards({
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{pubDate}</p>
+              <p>{new Date(pubDate).toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true
+              })}</p>
             </TooltipContent>
           </Tooltip>
         </div>
@@ -101,7 +109,7 @@ export default function SearchResultCards({
 
       <div className="flex items-center gap-2 mt-3">
         <MagnetLinkButton magnetLink={magnetLink} />
-        <DownloadWebtorButton infoHash={attrs.infohash} />
+        {attrs.infohash && <DownloadWebtorButton infoHash={attrs.infohash} />}
       </div>
     </div>
   );
