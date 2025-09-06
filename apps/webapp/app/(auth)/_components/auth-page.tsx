@@ -58,28 +58,28 @@ export default function AuthPage() {
 
     return (
         <div className="min-h-screen">
-            <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300">
+            <div className="min-h-screen bg-background transition-colors duration-300">
                 <div className="flex min-h-screen">
                     {/* Left Side - Image */}
-                    <div className="hidden lg:flex lg:w-1/2 relative bg-zinc-100 dark:bg-zinc-900">
-                        <div className="absolute inset-0 bg-gradient-to-br from-zinc-200 to-zinc-300 dark:from-zinc-800 dark:to-zinc-900" />
+                    <div className="hidden lg:flex lg:w-1/2 relative bg-card">
+                        <div className="absolute inset-0 bg-linear-to-br from-accent/40 to-muted" />
                         {/* Logo - Top Right */}
                         <div className="absolute top-6 left-6 z-20">
                             <div className="flex items-center space-x-4">
-                                <div className="w-6 h-6 bg-zinc-800 dark:bg-zinc-200 flex items-center justify-center rotate-[15deg]">
-                                    <div className="w-3 h-3 bg-zinc-100 dark:bg-zinc-800" />
+                                <div className="w-6 h-6 bg-foreground flex items-center justify-center rotate-[15deg]">
+                                    <div className="w-3 h-3 bg-background" />
                                 </div>
-                                <span className="text-xl font-bold text-zinc-800 dark:text-zinc-200">minimotto</span>
+                                <span className="text-xl font-bold text-foreground">minimotto</span>
                             </div>
                         </div>
                         <div className="relative z-10 flex items-center justify-center w-full">
                             <div className="text-center space-y-6 px-8">
-                                <div className="w-32 h-32 mx-auto bg-zinc-300 dark:bg-zinc-700 rounded-full flex items-center justify-center">
-                                    <div className="w-16 h-16 bg-zinc-400 dark:bg-zinc-600 rounded-full" />
+                                <div className="w-32 h-32 mx-auto bg-muted rounded-full flex items-center justify-center">
+                                    <div className="w-16 h-16 bg-accent rounded-full" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-200">Welcome Back</h2>
-                                    <p className="text-zinc-600 dark:text-zinc-400 max-w-md">
+                                    <h2 className="text-3xl font-bold text-foreground">Welcome Back</h2>
+                                    <p className="text-muted-foreground max-w-md">
                                         Open search and download your favorite movies, music, books, and more.
                                     </p>
                                 </div>
@@ -88,10 +88,10 @@ export default function AuthPage() {
                         {/* Quote - Bottom Right */}
                         <div className="absolute bottom-6 right-6 z-20 max-w-xs">
                             <blockquote className="text-right">
-                                <p className="text-sm italic text-zinc-600 dark:text-zinc-400 mb-2">
+                                <p className="text-sm italic text-muted-foreground mb-2">
                                     "Piracy is almost always a service problem and not a pricing problem."
                                 </p>
-                                <cite className="text-xs font-medium text-zinc-500 dark:text-zinc-500">— Gabe Newell</cite>
+                                <cite className="text-xs font-medium text-muted-foreground">— Gabe Newell</cite>
                             </blockquote>
                         </div>
                     </div>
@@ -101,10 +101,10 @@ export default function AuthPage() {
                         <div className="w-full max-w-md space-y-8">
                             {/* Header */}
                             <div className="text-center space-y-2">
-                                <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+                                <h1 className="text-3xl font-bold text-foreground">
                                     {isLogin ? "Sign In" : "Create Account"}
                                 </h1>
-                                <p className="text-zinc-600 dark:text-zinc-400">
+                                <p className="text-muted-foreground">
                                     {isLogin
                                         ? "Welcome back! Please sign in to your account"
                                         : "Get started by creating your new account"}
@@ -163,14 +163,13 @@ export default function AuthPage() {
                             <div className="space-y-4">
                                 {!isLogin && (
                                     <div className="space-y-2">
-                                        <Label htmlFor="name" className="text-zinc-700 dark:text-zinc-300">
+                                        <Label htmlFor="name" className="text-foreground">
                                             Full Name
                                         </Label>
                                         <Input
                                             id="name"
                                             type="text"
                                             placeholder="John Doe"
-                                            className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus:border-zinc-400 dark:focus:border-zinc-500"
                                             required
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
@@ -179,14 +178,13 @@ export default function AuthPage() {
                                 )}
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="email" className="text-zinc-700 dark:text-zinc-300">
+                                    <Label htmlFor="email" className="text-foreground">
                                         Email Address
                                     </Label>
                                     <Input
                                         id="email"
                                         type="email"
                                         placeholder="john@example.com"
-                                        className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus:border-zinc-400 dark:focus:border-zinc-500"
                                         required
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -194,7 +192,7 @@ export default function AuthPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="password" className="text-zinc-700 dark:text-zinc-300">
+                                    <Label htmlFor="password" className="text-foreground">
                                         Password
                                     </Label>
                                     <div className="relative">
@@ -202,7 +200,7 @@ export default function AuthPage() {
                                             id="password"
                                             type={showPassword ? "text" : "password"}
                                             placeholder="••••••••"
-                                            className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus:border-zinc-400 dark:focus:border-zinc-500 pr-10"
+                                            className="pr-10"
                                             required
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
@@ -211,7 +209,7 @@ export default function AuthPage() {
                                             type="button"
                                             variant="ghost"
                                             size="icon"
-                                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-zinc-500 dark:text-zinc-400"
+                                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-muted-foreground"
                                             onClick={() => setShowPassword(!showPassword)}
                                         >
                                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -225,15 +223,15 @@ export default function AuthPage() {
                                             <input
                                                 id="remember"
                                                 type="checkbox"
-                                                className="rounded border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-400"
+                                                className="h-4 w-4 rounded border-input accent-primary"
                                             />
-                                            <Label htmlFor="remember" className="text-sm text-zinc-600 dark:text-zinc-400">
+                                            <Label htmlFor="remember" className="text-sm text-muted-foreground">
                                                 Remember me
                                             </Label>
                                         </div>
                                         <Button
                                             variant="link"
-                                            className="px-0 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                            className="px-0 text-sm"
                                         >
                                             Forgot password?
                                         </Button>
@@ -241,7 +239,7 @@ export default function AuthPage() {
                                 )}
 
                                 <Button
-                                    className="w-full bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+                                    className="w-full"
                                     onClick={() => handleSignUp(isLogin)}
                                 >
                                     {isLogin ? "Sign In" : "Create Account"}
@@ -250,12 +248,12 @@ export default function AuthPage() {
 
                             {/* Toggle Form */}
                             <div className="text-center">
-                                <span className="text-zinc-600 dark:text-zinc-400">
+                                <span className="text-muted-foreground">
                                     {isLogin ? "Don't have an account? " : "Already have an account? "}
                                 </span>
                                 <Button
                                     variant="link"
-                                    className="px-0 text-zinc-900 dark:text-zinc-100 hover:text-zinc-700 dark:hover:text-zinc-300"
+                                    className="px-0"
                                     onClick={() => setIsLogin(!isLogin)}
                                 >
                                     {isLogin ? "Sign up" : "Sign in"}
@@ -264,18 +262,18 @@ export default function AuthPage() {
 
                             {/* Terms */}
                             {!isLogin && (
-                                <p className="text-xs text-center text-zinc-500 dark:text-zinc-400">
+                                <p className="text-xs text-center text-muted-foreground">
                                     By creating an account, you agree to our{" "}
                                     <Button
                                         variant="link"
-                                        className="px-0 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                        className="px-0 text-xs"
                                     >
                                         Terms of Service
                                     </Button>{" "}
                                     and{" "}
                                     <Button
                                         variant="link"
-                                        className="px-0 text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                                        className="px-0 text-xs"
                                     >
                                         Privacy Policy
                                     </Button>

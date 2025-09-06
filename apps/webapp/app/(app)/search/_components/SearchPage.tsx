@@ -19,13 +19,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import SearchResultCards, {
   SearchResultCardsProps,
   SearchResultCardsSkeleton,
 } from "./SearchResultCards";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   return (
@@ -38,16 +39,23 @@ function NoSearchResults({ searchQuery }: { searchQuery: string }) {
 
       <div className="text-center max-w-lg space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-muted-foreground mb-3">No results found</h2>
+          <h2 className="text-xl font-bold text-muted-foreground mb-3">
+            No results found
+          </h2>
           {searchQuery && (
             <p className="text-md text-muted-foreground">
-              We couldn't find anything for <span className="font-medium text-muted-foreground">"{searchQuery}"</span>
+              We couldn't find anything for{" "}
+              <span className="font-medium text-muted-foreground">
+                "{searchQuery}"
+              </span>
             </p>
           )}
         </div>
 
         <div className="bg-muted/30 rounded-lg p-6 border border-border/50">
-          <h3 className="text-sm font-semibold text-foreground mb-4">Try these suggestions:</h3>
+          <h3 className="text-sm font-semibold text-foreground mb-4">
+            Try these suggestions:
+          </h3>
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-center gap-3">
               <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
@@ -68,17 +76,18 @@ function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   );
 }
 
-type SortBy = "none" |
-  "seeders_asc" |
-  "seeders_desc" |
-  "peers_asc" |
-  "peers_desc" |
-  "date_uploaded_asc" |
-  "date_uploaded_desc" |
-  "size_asc" |
-  "size_desc" |
-  "name_asc" |
-  "name_desc";
+type SortBy =
+  | "none"
+  | "seeders_asc"
+  | "seeders_desc"
+  | "peers_asc"
+  | "peers_desc"
+  | "date_uploaded_asc"
+  | "date_uploaded_desc"
+  | "size_asc"
+  | "size_desc"
+  | "name_asc"
+  | "name_desc";
 
 export default function SearchResultsPage() {
   const searchParams = useSearchParams();
@@ -106,9 +115,13 @@ export default function SearchResultsPage() {
     } else if (sortBy === "peers_desc") {
       return searchResults.sort((a, b) => b.peers - a.peers);
     } else if (sortBy === "date_uploaded_asc") {
-      return searchResults.sort((a, b) => new Date(a.pubDate).getTime() - new Date(b.pubDate).getTime());
+      return searchResults.sort(
+        (a, b) => new Date(a.pubDate).getTime() - new Date(b.pubDate).getTime()
+      );
     } else if (sortBy === "date_uploaded_desc") {
-      return searchResults.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+      return searchResults.sort(
+        (a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+      );
     } else if (sortBy === "size_asc") {
       return searchResults.sort((a, b) => Number(a.size) - Number(b.size));
     } else if (sortBy === "size_desc") {
@@ -149,8 +162,8 @@ export default function SearchResultsPage() {
 
   return (
     <div className="">
-      <div className="flex items-center gap-2 w-full max-w-2xl">
-        <div className="flex-1 flex items-center gap-2 bg-secondary dark:bg-secondary rounded-full">
+      <div className="flex items-center justify-between gap-2 w-full">
+        <div className="flex-1 mt-4 flex items-center gap-2 bg-secondary dark:bg-secondary rounded-full max-w-2xl">
           <SearchIcon
             className="size-6 ml-4 hover:text-secondary-foreground transition-colors duration-300 text-muted-foreground"
             onClick={() => router.push(`/search?q=${searchTerm}`)}
@@ -168,12 +181,18 @@ export default function SearchResultsPage() {
           />
           <Mic className="size-6 mr-4 text-muted-foreground hover:text-secondary-foreground transition-colors duration-300" />
         </div>
+
+        <Link href={"/bookmarks"} className="max-w-xs">
+            <div className="text-sm font-bold text-muted-foreground hover:text-secondary-foreground transition-colors duration-300">
+            Bookmarks
+            </div>
+        </Link>
       </div>
 
       {/* Sorting */}
       <div className="mt-4 flex justify-end items-center gap-4">
         {sortBy !== "none" && (
-          <Badge className="p-2" variant="secondary" >
+          <Badge className="p-2" variant="secondary">
             {(() => {
               switch (sortBy) {
                 case "size_asc":
@@ -206,14 +225,30 @@ export default function SearchResultsPage() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => sortResults("size_asc")}>Size (Asc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("size_desc")}>Size (Desc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("seeders_asc")}>Seeders (Asc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("seeders_desc")}>Seeders (Desc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("peers_asc")}>Peers (Asc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("peers_desc")}>Peers (Desc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("date_uploaded_asc")}>Date Uploaded (Asc)</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => sortResults("date_uploaded_desc")}>Date Uploaded (Desc)</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("size_asc")}>
+              Size (Asc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("size_desc")}>
+              Size (Desc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("seeders_asc")}>
+              Seeders (Asc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("seeders_desc")}>
+              Seeders (Desc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("peers_asc")}>
+              Peers (Asc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("peers_desc")}>
+              Peers (Desc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("date_uploaded_asc")}>
+              Date Uploaded (Asc)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => sortResults("date_uploaded_desc")}>
+              Date Uploaded (Desc)
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -1,6 +1,13 @@
 import Search from "./_components/search";
 import Doodle from "./_components/doodle";
 import { Page } from "@/components/shared/page";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "minimotto | Torrent Search Engine",
+  description: "Torrent search engine",
+};
+
 
 export default function Home() {
   return (

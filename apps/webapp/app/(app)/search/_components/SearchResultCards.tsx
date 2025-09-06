@@ -12,8 +12,12 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import DownloadWebtorButton from "./DownloadWebtorButton";
+import { useSession } from "@/lib/auth-client";
+import { saveTorrent } from "../action";
+import { toast } from "sonner";
+import BookmarkButton from "./BookmarkButton";
 
 export type SearchResultCardsProps = {
   title: string;
@@ -29,7 +33,7 @@ export type SearchResultCardsProps = {
   peers: number;
   attrs: {
     infohash: string;
-  }
+  };
 };
 
 export default function SearchResultCards({
@@ -43,6 +47,30 @@ export default function SearchResultCards({
   peers,
   attrs,
 }: SearchResultCardsProps) {
+  const { data: session } = useSession();
+
+  const handleSaveTorrent = async () => {
+    const result = await saveTorrent({
+      title,
+      dateUploaded: pubDate,
+      size: parseInt(size),
+      seeders,
+      peers,
+      magnetLink,
+      infohash: attrs.infohash,
+    })
+
+    if (result.error) {
+      toast.error("Failed to bookmark torrent", {
+        description: "Please try again",
+      });
+    } else {
+      toast.success("Torrent bookmarked", {
+        description: "You can find it in your bookmarks",
+      });
+    }
+  } 
+
   return (
     <div className="bg-zinc-100/50 dark:bg-[#111111]/50 rounded-lg p-4">
       <div className="flex flex-col">
@@ -65,24 +93,27 @@ export default function SearchResultCards({
             <TooltipTrigger>
               <div className="flex items-center gap-1">
                 <CalendarArrowUp className="size-4" />
-                <p>{new Date(pubDate).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
+                <p>
+                  {new Date(pubDate).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </p>
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{new Date(pubDate).toLocaleString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: true
-              })}</p>
+              <p>
+                {new Date(pubDate).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: true,
+                })}
+              </p>
             </TooltipContent>
           </Tooltip>
         </div>
@@ -110,6 +141,7 @@ export default function SearchResultCards({
       <div className="flex items-center gap-2 mt-3">
         <MagnetLinkButton magnetLink={magnetLink} />
         {attrs.infohash && <DownloadWebtorButton infoHash={attrs.infohash} />}
+        {session && <BookmarkButton handleSaveTorrent={handleSaveTorrent} />}
       </div>
     </div>
   );
@@ -124,7 +156,7 @@ export function SearchResultCardsSkeleton() {
           <div className="h-8 bg-secondary-foreground/20 dark:bg-primary-foreground animate-pulse w-1/3" />
         </div>
         <div className="w-full h-20 bg-secondary-foreground/20 dark:bg-primary-foreground animate-pulse flex items-center justify-center"></div>
-      </div >
+      </div>
     </div>
   );
 }
