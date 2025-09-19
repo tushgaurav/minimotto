@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteContent } from "@/content/content";
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "minimotto.com",
-  description: "Torrent search engine",
+  title: siteContent.metadata.title,
+  description: siteContent.metadata.description,
 };
 
 export default function RootLayout({

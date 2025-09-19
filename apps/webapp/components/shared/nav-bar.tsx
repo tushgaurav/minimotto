@@ -14,6 +14,7 @@ import { ModeToggle } from "./mode-toggle";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Button } from "../ui/button";
 import UserMenu from "./user-menu";
+import { siteContent } from "@/content/content";
 
 export default function NavBar() {
   const { data: session, isPending } = useSession();
@@ -52,54 +53,49 @@ export default function NavBar() {
 
           <NavigationMenu>
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Docs</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <NavigationMenuLink asChild>
-                    <Link href="/docs">Docs</Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="/docs">How To</Link>
-                  </NavigationMenuLink>
-                  <NavigationMenuLink asChild>
-                    <Link href="/docs">Best Practices</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                    <li className="row-span-3">
-                      <NavigationMenuLink asChild>
-                        <Link
-                          className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
-                          href="/"
-                        >
-                          <div className="mt-4 mb-2 text-lg font-medium">
-                            Docs
-                          </div>
-                          <p className="text-muted-foreground text-sm leading-tight">
-                            How this site works and how to use it.
-                          </p>
-                        </Link>
-                      </NavigationMenuLink>
-                    </li>
-                    <ListItem href="/docs" title="Best Practices">
-                      Best practices for using this site.
-                    </ListItem>
-                    <ListItem href="/docs/installation" title="How To">
-                      How to install dependencies and structure your app.
-                    </ListItem>
-                    <ListItem
-                      href="/docs/primitives/typography"
-                      title="Typography"
-                    >
-                      Styles for headings, paragraphs, lists...etc
-                    </ListItem>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              {siteContent.header.menus.map((menu: any, index: number) => (
+                <NavigationMenuItem key={`${menu.trigger}-${index}`}>
+                  <NavigationMenuTrigger>{menu.trigger}</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    {menu.featured ? (
+                      <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                        <li className="row-span-3">
+                          <NavigationMenuLink asChild>
+                            <Link
+                              className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
+                              href={menu.featured.href}
+                            >
+                              <div className="mt-4 mb-2 text-lg font-medium">
+                                {menu.featured.title}
+                              </div>
+                              <p className="text-muted-foreground text-sm leading-tight">
+                                {menu.featured.description}
+                              </p>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        {menu.links?.map((link: any) => (
+                          <ListItem
+                            key={link.href}
+                            href={link.href}
+                            title={link.title || link.label}
+                          >
+                            {link.description}
+                          </ListItem>
+                        ))}
+                      </ul>
+                    ) : (
+                      <>
+                        {menu.links?.map((link: any) => (
+                          <NavigationMenuLink asChild key={link.href}>
+                            <Link href={link.href}>{link.label || link.title}</Link>
+                          </NavigationMenuLink>
+                        ))}
+                      </>
+                    )}
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              ))}
             </NavigationMenuList>
           </NavigationMenu>
         </div>

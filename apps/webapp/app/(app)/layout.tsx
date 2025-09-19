@@ -2,10 +2,11 @@ import NavBar from "@/components/shared/nav-bar";
 import Footer from "@/components/shared/footer";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { siteContent } from "@/content/content";
 
 export const metadata: Metadata = {
-  title: "minimotto.com",
-  description: "Torrent search engine",
+  title: siteContent.metadata.title,
+  description: siteContent.metadata.description,
 };
 
 export default function AppLayout({

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn, signUp } from "@/lib/auth-client"
+import Image from "next/image"
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true)
@@ -62,17 +63,20 @@ export default function AuthPage() {
                 <div className="flex min-h-screen">
                     {/* Left Side - Image */}
                     <div className="hidden lg:flex lg:w-1/2 relative bg-card">
-                        <div className="absolute inset-0 bg-linear-to-br from-accent/40 to-muted" />
+                        <div >
+                            <div className="absolute inset-0 bg-linear-to-br from-accent/40 to-muted z-10"></div>
+                            <Image src="/images/login.jpg" className="object-cover" fill alt="waves in a river, someone just flushed i think" />
+                        </div>
                         {/* Logo - Top Right */}
-                        <div className="absolute top-6 left-6 z-20">
+                        {/* <div className="absolute top-6 left-6 z-20">
                             <div className="flex items-center space-x-4">
                                 <div className="w-6 h-6 bg-foreground flex items-center justify-center rotate-[15deg]">
                                     <div className="w-3 h-3 bg-background" />
                                 </div>
                                 <span className="text-xl font-bold text-foreground">minimotto</span>
                             </div>
-                        </div>
-                        <div className="relative z-10 flex items-center justify-center w-full">
+                        </div> */}
+                        {/* <div className="relative z-10 flex items-center justify-center w-full">
                             <div className="text-center space-y-6 px-8">
                                 <div className="w-32 h-32 mx-auto bg-muted rounded-full flex items-center justify-center">
                                     <div className="w-16 h-16 bg-accent rounded-full" />
@@ -84,14 +88,14 @@ export default function AuthPage() {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         {/* Quote - Bottom Right */}
                         <div className="absolute bottom-6 right-6 z-20 max-w-xs">
                             <blockquote className="text-right">
-                                <p className="text-sm italic text-muted-foreground mb-2">
+                                <p className="text-md italic text-muted-foreground mb-2">
                                     "Piracy is almost always a service problem and not a pricing problem."
                                 </p>
-                                <cite className="text-xs font-medium text-muted-foreground">— Gabe Newell</cite>
+                                <cite className="text-sm font-medium text-muted-foreground">— Gabe Newell</cite>
                             </blockquote>
                         </div>
                     </div>
