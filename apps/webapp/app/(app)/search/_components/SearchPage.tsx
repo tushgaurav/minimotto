@@ -27,6 +27,7 @@ import SearchResultCards, {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { search } from "../action";
 
 function NoSearchResults({ searchQuery }: { searchQuery: string }) {
   return (
@@ -142,10 +143,8 @@ export default function SearchResultsPage() {
 
   const search = async (query: string, page: number = 1) => {
     setLoading(true);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}search/?q=${query}&page=${page}`
-    );
-    const data = await res.json();
+    const data = await search(query, page);
+  
     console.log({ data });
     setSearchResults({
       page: data.page,

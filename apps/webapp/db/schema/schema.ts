@@ -25,3 +25,12 @@ export const savedTorrents = pgTable("saved_torrents", {
     .notNull(),
   deleteAt: timestamp("delete_at"),
 });
+
+export const userStats = pgTable("user_stats", {
+  id: text("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  totalSearches: integer("total_searches").notNull().default(0),
+  totalBookmarks: integer("total_bookmarks").notNull().default(0),
+});
